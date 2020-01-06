@@ -66,3 +66,8 @@ class FlatVector:
         start = self.start_point * other
         end = self.end_point * other
         return FlatVector(start, end)
+
+    def __str__(self):
+        return f"Start point: {str(self.start_point)}" \
+               f"\nEnd point: {str(self.end_point)}" \
+               f"\n\nRadius vector: {str(self.radius_vector())}"
