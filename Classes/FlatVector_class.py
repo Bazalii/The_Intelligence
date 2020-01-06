@@ -31,3 +31,6 @@ class FlatVector:
             self.move_to_point(vector.end_point)
         else:
             raise TypeError("Incorrect input of vector.")
+
+    def copy(self):
+        return FlatVector(self.start_point, self.end_point)
