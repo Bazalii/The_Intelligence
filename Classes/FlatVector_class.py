@@ -15,3 +15,9 @@ class FlatVector:
 
     def length(self) -> float:
         return ((self.start_point.x - self.end_point.x) ** 2 + (self.start_point.y - self.end_point.y) ** 2) ** 0.5
+
+    def move_to_point(self, new_start_point: Point or tuple):
+        new_start_point = Point.check_Point(new_start_point)
+        dif_val = self.start_point - new_start_point
+        self.start_point -= dif_val
+        self.end_point -= dif_val
