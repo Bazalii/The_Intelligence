@@ -34,3 +34,35 @@ class FlatVector:
 
     def copy(self):
         return FlatVector(self.start_point, self.end_point)
+
+    # +
+    def __add__(self, other: Point or tuple or list):
+        if type(other) == FlatVector:
+            return FlatVector(self.start_point + other.start_point, self.end_point + other.end_point)
+        other = Point.check_Point(other)
+        start = self.start_point + other
+        end = self.end_point + other
+        return FlatVector(start, end)
+
+    # -
+    def __sub__(self, other):
+        if type(other) == FlatVector:
+            return FlatVector(self.start_point - other.start_point, self.end_point - other.end_point)
+        other = Point.check_Point(other)
+        start = self.start_point - other
+        end = self.end_point - other
+        return FlatVector(start, end)
+
+    # /
+    def __truediv__(self, other):
+        other = Point.check_Point(other)
+        start = self.start_point / other
+        end = self.end_point / other
+        return FlatVector(start, end)
+
+    # *
+    def __mul__(self, other):
+        other = Point.check_Point(other)
+        start = self.start_point * other
+        end = self.end_point * other
+        return FlatVector(start, end)
