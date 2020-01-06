@@ -77,14 +77,19 @@ class Point:
         else:
             return False
 
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
     def tuple_format(self) -> tuple:
         return tuple([self.x, self.y])
 
     def list_format(self) -> list:
         return [self.x, self.y]
 
-    def __str__(self):
-        return f"({self.x}, {self.y})"
+    def to_int(self):
+        self.x = int(self.x)
+        self.y = int(self.y)
+        return Point(self.x, self.y)
 
     @classmethod
     def check_Point(cls, obj):
