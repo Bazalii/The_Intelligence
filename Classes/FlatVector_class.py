@@ -71,3 +71,17 @@ class FlatVector:
         return f"Start point: {str(self.start_point)}" \
                f"\nEnd point: {str(self.end_point)}" \
                f"\n\nRadius vector: {str(self.radius_vector())}"
+
+
+def find_collinear_coefficients(what: FlatVector, i_fv: FlatVector, j_fv: FlatVector):
+    # fv - flat vector
+    # p - point
+    # c - coefficient
+    # rv - radius vector
+    what_rv = what.radius_vector()
+    i_rv = i_fv.radius_vector()
+    j_rv = j_fv.radius_vector()
+
+    j_c = (what_rv.y * i_rv.x - i_rv.y * what_rv.x) / (j_rv.y * i_rv.x - j_rv.x * i_rv.y)
+    i_c = (what_rv.x - j_rv.x * j_c) / i_rv.x
+    return i_c, j_c
