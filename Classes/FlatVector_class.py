@@ -21,3 +21,6 @@ class FlatVector:
         dif_val = self.start_point - new_start_point
         self.start_point -= dif_val
         self.end_point -= dif_val
+
+    def radius_vector(self) -> Point:
+        return self.end_point - self.start_point
