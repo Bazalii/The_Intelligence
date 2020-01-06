@@ -24,3 +24,10 @@ class FlatVector:
 
     def radius_vector(self) -> Point:
         return self.end_point - self.start_point
+
+    def move_along_vector(self, vector):
+        if type(vector) == FlatVector:
+            vector.move_to_point(self.start_point)
+            self.move_to_point(vector.end_point)
+        else:
+            raise TypeError("Incorrect input of vector.")
