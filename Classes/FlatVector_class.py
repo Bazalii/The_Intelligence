@@ -12,3 +12,6 @@ class FlatVector:
             point2 = Point.check_Point(point2)
             self.start_point: Point = point1
             self.end_point: Point = point2
+
+    def length(self) -> float:
+        return ((self.start_point.x - self.end_point.x) ** 2 + (self.start_point.y - self.end_point.y) ** 2) ** 0.5
