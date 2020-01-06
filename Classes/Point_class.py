@@ -77,6 +77,9 @@ class Point:
         else:
             return False
 
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
     @classmethod
     def check_Point(cls, obj):
         if type(obj) == Point:
