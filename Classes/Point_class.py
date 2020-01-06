@@ -91,6 +91,9 @@ class Point:
         self.y = int(self.y)
         return Point(self.x, self.y)
 
+    def copy(self):
+        return Point(self.x, self.y)
+
     @classmethod
     def check_Point(cls, obj):
         if type(obj) == Point:
