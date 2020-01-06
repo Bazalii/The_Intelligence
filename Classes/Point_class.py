@@ -70,6 +70,13 @@ class Point:
             raise TypeError("Incorrect input type to sum with Point class object!")
         return Point(x, y)
 
+    def __eq__(self, other):
+        other = Point.check_Point(other)
+        if self.x == other.x and self.y == other.y:
+            return True
+        else:
+            return False
+
     @classmethod
     def check_Point(cls, obj):
         if type(obj) == Point:
