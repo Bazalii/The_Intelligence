@@ -69,3 +69,12 @@ class Point:
         else:
             raise TypeError("Incorrect input type to sum with Point class object!")
         return Point(x, y)
+
+    @classmethod
+    def check_Point(cls, obj):
+        if type(obj) == Point:
+            return Point(obj.x, obj.y)
+        elif type(obj) == tuple or type(obj) == list:
+            return Point(obj)
+        else:
+            raise TypeError("Object can not be Point!")
