@@ -10,8 +10,9 @@ class Point:
             self.y = x
         else:
             try:
-                self.x = x[0]
-                self.y = x[1]
+                if (type(x[0]) == int or type(x[0]) == float) and (type(x[1]) == int or type(x[1]) == float):
+                    self.x = x[0]
+                    self.y = x[1]
             except:
                 raise TypeError("Incorrect input type. Type is not iterable.")
 
