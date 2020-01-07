@@ -90,6 +90,26 @@ class FlatVector:
         end = self.end_point * other
         return FlatVector(start, end)
 
+    # ==
+    def __eq__(self, other):
+        """
+        Вектора равны, если их радиус-вектора равны.
+        :param other: Вектор с которым идет сравнение.
+        :return: True или False.
+        """
+        if other.radius_vector() == self.radius_vector():
+            return True
+        else:
+            return False
+
+    def __getitem__(self, item: int):
+        if item == 0:
+            return self.start_point
+        elif item == 1:
+            return self.end_point
+        else:
+            raise IndexError("Index out of range.")
+
     def __str__(self):
         return f"Start point: {str(self.start_point)}" \
                f"\nEnd point: {str(self.end_point)}" \
