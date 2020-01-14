@@ -209,9 +209,11 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+/.idea
 Будет удалено .idea/.gitignore
 Будет удалено .idea/The_Intelligence.iml
 Будет удалено .idea/inspectionProfiles/
 Будет удалено .idea/misc.xml
 Будет удалено .idea/modules.xml
 Будет удалено .idea/vcs.xml
+!/Scripts/
