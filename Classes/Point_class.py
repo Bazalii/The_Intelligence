@@ -184,10 +184,15 @@ class Point:
         :return: Коррекный объект класса Point.
         """
         if type(obj) == Point:
-            return Point(obj.x, obj.y)
+            return Point(obj.x, obj.y, obj.z)
         else:
             try:
                 if (type(obj[0]) == int and type(obj[1]) == int) or (type(obj[0]) == float and type(obj[1]) == float):
+                    if len(obj) > 2:
+                        if type(obj[2]) == int or type(obj[2]) == float:
+                            return Point(obj)
+                        else:
+                            raise TypeError("Object can not be Point!")
                     return Point(obj)
             except:
                 raise TypeError("Object can not be Point!")
