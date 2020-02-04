@@ -9,7 +9,7 @@ def nothing(*arg):
 if __name__ == '__main__':
     try:
         cv.namedWindow("Set HSV mask")  # создаем окно настроек
-        photo = input("Please input path to the photo.")
+        photo = input("Please input path to the photo:\n")
         img = cv.imread(photo)
         # создаем 6 бегунков для настройки начального и конечного цвета фильтра
         cv.createTrackbar('h1', 'Set HSV mask', 0, 255, nothing)
