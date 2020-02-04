@@ -142,7 +142,10 @@ class Point:
             return False
 
     def __str__(self):
-        return f"({self.x}, {self.y})"
+        if self.z is not None:
+            return f"({self.x}, {self.y}, {self.z})"
+        else:
+            return f"({self.x}, {self.y})"
 
     def tuple_format(self) -> tuple:
         """
