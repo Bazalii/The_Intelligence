@@ -22,19 +22,35 @@ class Point:
 
     # +
     def __add__(self, other: tuple or float):
+        z = None
         if type(other) == Point:
             x = self.x + other.x
             y = self.y + other.y
+            if other.z is not None:
+                if self.z is None:
+                    z = other.z
+                else:
+                    z = self.z + other.z
         elif type(other) == int or type(other) == float:
             x = self.x + other
             y = self.y + other
+            if self.z is None:
+                z = other
+            else:
+                z = self.z + other
         else:
             try:
                 x = self.x + other[0]
                 y = self.y + other[1]
+                if len(other) > 2:
+                    if self.z is None:
+                        z = other[2]
+                    else:
+                        z = self.z + other[2]
+
             except:
                 raise TypeError("Incorrect input type to sum with Point class object!")
-        return Point(x, y)
+        return Point(x, y, z)
 
     # -
     def __sub__(self, other: tuple or float):
