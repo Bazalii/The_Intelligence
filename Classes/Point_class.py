@@ -18,62 +18,66 @@ class Point:
 
     # +
     def __add__(self, other: tuple or float):
-        if type(other) == tuple or type(other) == list:
-            x = self.x + other[0]
-            y = self.y + other[1]
-        elif type(other) == Point:
+        if type(other) == Point:
             x = self.x + other.x
             y = self.y + other.y
         elif type(other) == int or type(other) == float:
             x = self.x + other
             y = self.y + other
         else:
-            raise TypeError("Incorrect input type to sum with Point class object!")
+            try:
+                x = self.x + other[0]
+                y = self.y + other[1]
+            except:
+                raise TypeError("Incorrect input type to sum with Point class object!")
         return Point(x, y)
 
     # -
     def __sub__(self, other: tuple or float):
-        if type(other) == tuple or type(other) == list:
-            x = self.x - other[0]
-            y = self.y - other[1]
-        elif type(other) == Point:
+        if type(other) == Point:
             x = self.x - other.x
             y = self.y - other.y
         elif type(other) == int or type(other) == float:
             x = self.x - other
             y = self.y - other
         else:
-            raise TypeError("Incorrect input type to sum with Point class object!")
+            try:
+                x = self.x - other[0]
+                y = self.y - other[1]
+            except:
+                raise TypeError("Incorrect input type to sum with Point class object!")
         return Point(x, y)
 
     #  /
     def __truediv__(self, other: tuple or float):
-        if type(other) == tuple or type(other) == list:
-            x = self.x / other[0]
-            y = self.y / other[1]
-        elif type(other) == Point:
+        if type(other) == Point:
             x = self.x / other.x
             y = self.y / other.y
         elif type(other) == int or type(other) == float:
             x = self.x / other
             y = self.y / other
         else:
-            raise TypeError("Incorrect input type to sum with Point class object!")
+            try:
+                x = self.x / other[0]
+                y = self.y / other[1]
+            except:
+                raise TypeError("Incorrect input type to sum with Point class object!")
         return Point(x, y)
 
     # *
     def __mul__(self, other: tuple or float):
-        if type(other) == tuple or type(other) == list:
-            x = self.x * other[0]
-            y = self.y * other[1]
-        elif type(other) == Point:
+        if type(other) == Point:
             x = self.x * other.x
             y = self.y * other.y
         elif type(other) == int or type(other) == float:
             x = self.x * other
             y = self.y * other
         else:
-            raise TypeError("Incorrect input type to sum with Point class object!")
+            try:
+                x = self.x * other[0]
+                y = self.y * other[1]
+            except:
+                raise TypeError("Incorrect input type to sum with Point class object!")
         return Point(x, y)
 
     def __eq__(self, other):
@@ -121,7 +125,9 @@ class Point:
         """
         if type(obj) == Point:
             return Point(obj.x, obj.y)
-        elif type(obj) == tuple or type(obj) == list:
-            return Point(obj)
         else:
-            raise TypeError("Object can not be Point!")
+            try:
+                if (type(obj[0]) == int and type(obj[1]) == int) or (type(obj[0]) == float and type(obj[1]) == float):
+                    return Point(obj)
+            except:
+                raise TypeError("Object can not be Point!")
