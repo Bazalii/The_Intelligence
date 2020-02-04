@@ -136,7 +136,7 @@ class Point:
 
     def __eq__(self, other):
         other = Point.check_Point(other)
-        if self.x == other.x and self.y == other.y:
+        if self.x == other.x and self.y == other.y and self.z == other.z:
             return True
         else:
             return False
