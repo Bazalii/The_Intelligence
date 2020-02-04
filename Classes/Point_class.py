@@ -1,18 +1,22 @@
 class Point:
-    def __init__(self, x: float or tuple or list, y: float = None):
+    def __init__(self, x: float or tuple or list, y: float = None, z: float = None):
         """
         Создает точку плоскости.
         :param x: Позиция точки по X (может принимать значения точки в виде итерируемого объекта).
         :param y: Позиция точки по Y.
+        :param z: Позиция точки по Z.
         """
         if y is not None:
             self.x = x
             self.y = x
+            self.z = z
         else:
             try:
                 if (type(x[0]) == int or type(x[0]) == float) and (type(x[1]) == int or type(x[1]) == float):
                     self.x = x[0]
                     self.y = x[1]
+                    if (len(x) >= 3) and (type(x[2]) == int or type(x[2])):
+                        self.z = x[2]
             except:
                 raise TypeError("Incorrect input type. Type is not iterable.")
 
