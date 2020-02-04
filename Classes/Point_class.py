@@ -81,7 +81,7 @@ class Point:
                         z = self.z - other[2]
 
             except:
-                raise TypeError("Incorrect input type to sum with Point class object!")
+                raise TypeError("Incorrect input type to subtract with Point class object!")
         return Point(x, y, z)
 
     #  /
@@ -106,7 +106,7 @@ class Point:
                     z = self.z / other[2]
 
             except:
-                raise TypeError("Incorrect input type to sum with Point class object!")
+                raise TypeError("Incorrect input type to divide with Point class object!")
         return Point(x, y, z)
 
     # *
@@ -131,7 +131,7 @@ class Point:
                     z = self.z * other[2]
 
             except:
-                raise TypeError("Incorrect input type to sum with Point class object!")
+                raise TypeError("Incorrect input type to multiply with Point class object!")
         return Point(x, y, z)
 
     def __eq__(self, other):
