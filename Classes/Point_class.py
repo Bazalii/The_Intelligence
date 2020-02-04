@@ -151,7 +151,10 @@ class Point:
         """
         :return: Значения точки в виде кортежа.
         """
-        return tuple([self.x, self.y])
+        if self.z is not None:
+            return tuple([self.x, self.y, self.z])
+        else:
+            return tuple([self.x, self.y])
 
     def list_format(self) -> list:
         """
