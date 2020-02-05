@@ -8,7 +8,7 @@ class Point:
         """
         if y is not None:
             self.x = x
-            self.y = x
+            self.y = y
             self.z = z
         else:
             try:
