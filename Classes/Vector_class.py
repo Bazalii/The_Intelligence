@@ -28,7 +28,12 @@ class Vector:
         """
         :return: Длину вектора.
         """
-        return ((self.start_point.x - self.end_point.x) ** 2 + (self.start_point.y - self.end_point.y) ** 2) ** 0.5
+        if self.start_point.z is None:
+            return ((self.start_point.x - self.end_point.x) ** 2 + (self.start_point.y - self.end_point.y) ** 2) ** 0.5
+        else:
+            return ((self.start_point.x - self.end_point.x) ** 2
+                    + (self.start_point.y - self.end_point.y) ** 2
+                    + (self.start_point.z - self.end_point.z) ** 2) ** 0.5
 
     def move_to_point(self, new_start_point: Point or tuple) -> None:
         """
@@ -40,7 +45,7 @@ class Vector:
         self.start_point -= dif_val
         self.end_point -= dif_val
 
-    def radius_vector(self):
+    def radius_vector(self) -> Point:
         """
         :return: Радиус вектор в виде точки.
         """
@@ -124,7 +129,7 @@ class Vector:
 
 def find_collinear_coefficients(what: Vector, i_fv: Vector, j_fv: Vector):
     """
-    Раскладывает вектор на 2 коллинеарных вектора. Возвращает 2 коэффициента разложения на которые необходимо
+    Раскладывает плоский вектор на 2 коллинеарных вектора. Возвращает 2 коэффициента разложения на которые необходимо
      домножить 2 коллинеарных вектора, чтобы при их суммировании получить исходный вектор разложения.
     :param what: Какой вектор раскладывать.
     :param i_fv: Первый вектор для разложения.
