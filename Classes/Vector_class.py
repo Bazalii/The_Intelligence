@@ -1,7 +1,7 @@
 from Classes.Point_class import Point
 
 
-class FlatVector:
+class Vector:
     def __init__(self, point1: Point or tuple, point2: Point or tuple = None):
         """
         Создает вектор плоскости. Если дана только одна точка, то вектор счетается радиус-вектором(начало в (0,0)).
@@ -51,7 +51,7 @@ class FlatVector:
         Перемещает существующий вектор вдоль другого вектора.
         :param vector: Вектор вдоль которого необходимо перемещать.
         """
-        if type(vector) == FlatVector:
+        if type(vector) == Vector:
             vector = vector.copy()
             vector.move_to_point(self.start_point)
             self.move_to_point(vector.end_point)
@@ -62,39 +62,39 @@ class FlatVector:
         """
         :return: Копию вектора.
         """
-        return FlatVector(self.start_point, self.end_point)
+        return Vector(self.start_point, self.end_point)
 
     # +
     def __add__(self, other: Point or tuple or list):
-        if type(other) == FlatVector:
-            return FlatVector(self.start_point + other.start_point, self.end_point + other.end_point)
+        if type(other) == Vector:
+            return Vector(self.start_point + other.start_point, self.end_point + other.end_point)
         other = Point.check_Point(other)
         start = self.start_point + other
         end = self.end_point + other
-        return FlatVector(start, end)
+        return Vector(start, end)
 
     # -
     def __sub__(self, other):
-        if type(other) == FlatVector:
-            return FlatVector(self.start_point - other.start_point, self.end_point - other.end_point)
+        if type(other) == Vector:
+            return Vector(self.start_point - other.start_point, self.end_point - other.end_point)
         other = Point.check_Point(other)
         start = self.start_point - other
         end = self.end_point - other
-        return FlatVector(start, end)
+        return Vector(start, end)
 
     # /
     def __truediv__(self, other):
         other = Point.check_Point(other)
         start = self.start_point / other
         end = self.end_point / other
-        return FlatVector(start, end)
+        return Vector(start, end)
 
     # *
     def __mul__(self, other):
         other = Point.check_Point(other)
         start = self.start_point * other
         end = self.end_point * other
-        return FlatVector(start, end)
+        return Vector(start, end)
 
     # ==
     def __eq__(self, other):
@@ -122,7 +122,7 @@ class FlatVector:
                f"\n\nRadius vector: {str(self.radius_vector())}"
 
 
-def find_collinear_coefficients(what: FlatVector, i_fv: FlatVector, j_fv: FlatVector):
+def find_collinear_coefficients(what: Vector, i_fv: Vector, j_fv: Vector):
     """
     Раскладывает вектор на 2 коллинеарных вектора. Возвращает 2 коэффициента разложения на которые необходимо
      домножить 2 коллинеарных вектора, чтобы при их суммировании получить исходный вектор разложения.
