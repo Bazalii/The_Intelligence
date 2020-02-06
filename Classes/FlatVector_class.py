@@ -11,12 +11,18 @@ class FlatVector:
         point1 = Point.check_Point(point1)
 
         if type(point2) is None:
-            self.start_point: Point = Point(0, 0)
+            if point1.z is None:
+                self.start_point: Point = Point(0, 0)
+            else:
+                self.start_point: Point = Point(0, 0, 0)
             self.end_point: Point = point1
         else:
             point2 = Point.check_Point(point2)
-            self.start_point: Point = point1
-            self.end_point: Point = point2
+            if (point1.z is None and point2.z is None) or (point1.z is not None and point2.z is not None):
+                self.start_point: Point = point1
+                self.end_point: Point = point2
+            else:
+                raise TypeError("Flat and 3D points used in one Vector obj.")
 
     def length(self) -> float:
         """
