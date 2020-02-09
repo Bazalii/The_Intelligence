@@ -1,6 +1,7 @@
 from threading import Thread
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 
 class ForceGraph(Thread):
@@ -29,21 +30,22 @@ class ForceGraph(Thread):
         self.ax.set_zlabel('Z, g')
 
         while self.run_available:
-            if len(self.buffer) > 1:
-                for i in range(4):
-                    self.ax.lines[0].remove()
+            if len(self.buffer) > 0:
+                if len(self.ax.lines) >= 4:
+                    for i in range(4):
+                        self.ax.lines[0].remove()
 
                 val = self.buffer.pop(0)
-                self.ax.plot([0, 0], [0, 0], [0, val['-x']])
-                self.ax.plot([100, 100], [100, 100], [0, val['+x']])
-                self.ax.plot([100, 100], [0, 0], [0, val['-y']])
-                self.ax.plot([0, 0], [100, 100], [0, val['+y']])
+                self.ax.plot([-100, -100], [-100, -100], [0, val['-x']], c=[0.7, 0.2, 0.2, 1])
+                self.ax.plot([100, 100], [100, 100], [0, val['+x']], c=[0.2, 0.7, 0.2, 1])
+                self.ax.plot([100, 100], [-100, -100], [0, val['-y']], c=[0.2, 0.2, 0.7, 1])
+                self.ax.plot([-100, -100], [100, 100], [0, val['+y']], c=[0.2, 0.2, 0.2, 1])
                 plt.draw()
+                plt.pause(0.0001)
 
     def terminate_thread(self):
         self.run_available = False
         if self.ax is not None:
-            self.ax.show()
             del self.ax
 
     def add_to_buffer(self, val: list or dict):
