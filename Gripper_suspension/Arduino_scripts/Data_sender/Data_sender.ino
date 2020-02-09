@@ -4,17 +4,17 @@
 // Tensor (+X)
 #define plus_x_DOT 9
 #define plus_x_SCK 10
-#define calibration_plus_x -13.6
+#define calibration_plus_x -14.1
 
 // Tensor (-X)
 #define minus_x_DOT 7
 #define minus_x_SCK 8
-#define calibration_minus_x -13.6
+#define calibration_minus_x -14.1
 
 // Tensor (+Y)
 #define plus_y_DOT 5
 #define plus_y_SCK 6
-#define calibration_plus_y -13.6
+#define calibration_plus_y -13.75
 
 // Tensor (-Y)
 #define minus_y_DOT 3
