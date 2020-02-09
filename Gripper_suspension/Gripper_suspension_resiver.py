@@ -4,6 +4,20 @@ from time import sleep
 import serial
 import serial.tools.list_ports
 
+functions_sequence = [[], [], []]
+
+
+def synchronize_in_thread(function):
+    global functions_sequence
+
+    def wrapper(*args, **kwargs):
+        functions_sequence[0].append(function)
+        functions_sequence[1].append(args)
+        functions_sequence[2].append(kwargs)
+        return None
+
+    return wrapper
+
 
 class GripSuspension(Thread):
 
