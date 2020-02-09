@@ -46,5 +46,8 @@ class ForceGraph(Thread):
             self.ax.show()
             del self.ax
 
-    def add_to_buffer(self, val: list):
-        self.buffer.extend(val)
+    def add_to_buffer(self, val: list or dict):
+        if type(val) == list:
+            self.buffer.extend(val)
+        elif type(val) == dict:
+            self.buffer.append(val)
