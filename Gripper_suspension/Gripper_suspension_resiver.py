@@ -27,7 +27,7 @@ class GripSuspension(Thread):
         Thread.__init__(self)
         self.run_available = False
         self.data_buffer_len = 5
-        self.sleep_time = 0.05
+        self.sleep_time = 0.1
         self.buffer = []
         self.graph = None
 
@@ -41,6 +41,8 @@ class GripSuspension(Thread):
             self.sleep_time = kwargs["sleep_time"]
         if kwargs.get("graph", False):
             self.graph = ForceGraph()
+
+        self.start()
 
     def run(self) -> None:
         global functions_sequence
@@ -68,8 +70,9 @@ class GripSuspension(Thread):
                             data: str = data.decode('utf-8').strip()
 
                         if data != "":
-                            data.replace("$", '')
-                            data.replace(";", '')
+                            data = data.replace("$", '')
+                            data = data.replace(';', '')
+                            data = data.strip()
                             parse = data.split(" ")
                             parse = {"+x": float(parse[0][2:]), "-x": float(parse[1][2:]),
                                      "+y": float(parse[2][2:]), "-y": float(parse[3][2:])}
@@ -80,8 +83,7 @@ class GripSuspension(Thread):
                             if self.graph is not None:
                                 self.graph.add_to_buffer(parse)
                     except:
-                        Exception("")
-                        return None
+                        pass
 
     @synchronize_in_thread
     def connect(self, port: str, baudrate: int):
@@ -114,6 +116,8 @@ class GripSuspension(Thread):
         if self.graph is not None:
             self.graph.terminate_thread()
         self.run_available = False
+        self.graph.join()
+        self.join()
 
     @synchronize_in_thread
     def current_buff(self):
