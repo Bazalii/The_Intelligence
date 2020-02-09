@@ -1,3 +1,5 @@
 numpy==1.17.2
 opencv-python==4.1.2.30
 opencv-contrib-python==4.1.2.30
+serial==0.0.97
+pyserial==3.4
