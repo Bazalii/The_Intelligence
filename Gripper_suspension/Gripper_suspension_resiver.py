@@ -77,3 +77,10 @@ def connect(self, port: str, baudrate: int):
         print("Available ports:")
         for port in list(d.device for d in serial.tools.list_ports.comports()):
             print(port)
+
+
+@synchronize_in_thread
+def disconnect(self):
+    if self.serial is not None:
+        self.serial.close()
+        self.serial = None
