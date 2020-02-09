@@ -38,3 +38,6 @@ class ForceGraph(Thread):
                 ax.plot([100, 100], [0, 0], [0, val['-y']])
                 ax.plot([0, 0], [100, 100], [0, val['+y']])
                 plt.draw()
+
+    def terminate_thread(self):
+        self.run_available = False
