@@ -34,3 +34,35 @@ class GripSuspension(Thread):
             self.data_buffer_len = kwargs["data_buffer"]
         if kwargs.get("sleep_time", False):
             self.sleep_time = kwargs["sleep_time"]
+
+    def run(self) -> None:
+        global functions_sequence
+
+        self.run_available = True
+
+        while self.run_available:
+            sleep(self.sleep_time)
+
+            if len(functions_sequence[0]) > 0:
+                function = functions_sequence[0].pop(0)
+                arguments = functions_sequence[1].pop(0)
+                key_word_arguments = functions_sequence[2].pop(0)
+                function(*arguments, **key_word_arguments)
+
+            if self.serial is not None:
+                if not self.serial.is_open:
+                    self.serial.open()
+
+                while self.serial.in_waiting:
+                    try:
+                        data: bytes = self.serial.readline()
+
+                        if type(data) == bytes:
+                            data: str = data.decode('utf-8').strip()
+
+                        if data != "":
+                            pass
+
+                    except:
+                        Exception("")
+                        return None
