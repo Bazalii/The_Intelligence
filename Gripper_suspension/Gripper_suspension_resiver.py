@@ -66,3 +66,14 @@ class GripSuspension(Thread):
                     except:
                         Exception("")
                         return None
+
+
+@synchronize_in_thread
+def connect(self, port: str, baudrate: int):
+    try:
+        self.serial = serial.Serial(port, baudrate, timeout=0.2)
+    except serial.SerialException:
+        print("Can not connect to serial port.")
+        print("Available ports:")
+        for port in list(d.device for d in serial.tools.list_ports.comports()):
+            print(port)
