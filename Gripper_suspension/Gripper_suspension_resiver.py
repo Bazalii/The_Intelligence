@@ -108,3 +108,8 @@ def send_to_serial(self, information: str):
 def terminate_thread(self):
     self.disconnect()
     self.run_available = False
+
+
+@synchronize_in_thread
+def current_buff(self):
+    return self.buffer
