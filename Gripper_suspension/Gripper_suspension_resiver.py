@@ -4,6 +4,8 @@ from time import sleep
 import serial
 import serial.tools.list_ports
 
+from Gripper_suspension.Force_graph import ForceGraph
+
 functions_sequence = [[], [], []]
 
 
@@ -27,6 +29,7 @@ class GripSuspension(Thread):
         self.data_buffer_len = 5
         self.sleep_time = 0.05
         self.buffer = []
+        self.graph = None
 
         if (port is not None) and (baudrate is not None):
             self.serial = serial.Serial(port, baudrate, timeout=0.2)
@@ -36,6 +39,8 @@ class GripSuspension(Thread):
             self.data_buffer_len = kwargs["data_buffer"]
         if kwargs.get("sleep_time", False):
             self.sleep_time = kwargs["sleep_time"]
+        if kwargs.get("graph", False):
+            self.graph = ForceGraph()
 
     def run(self) -> None:
         global functions_sequence
@@ -72,45 +77,44 @@ class GripSuspension(Thread):
                                 self.buffer.pop(0)
                                 self.buffer.append(parse)
 
+                            if self.graph is not None:
+                                self.graph.add_to_buffer(parse)
                     except:
                         Exception("")
                         return None
 
+    @synchronize_in_thread
+    def connect(self, port: str, baudrate: int):
+        try:
+            self.serial = serial.Serial(port, baudrate, timeout=0.2)
+        except serial.SerialException:
+            print("Can not connect to serial port.")
+            print("Available ports:")
+            for port in list(d.device for d in serial.tools.list_ports.comports()):
+                print(port)
 
-@synchronize_in_thread
-def connect(self, port: str, baudrate: int):
-    try:
-        self.serial = serial.Serial(port, baudrate, timeout=0.2)
-    except serial.SerialException:
-        print("Can not connect to serial port.")
-        print("Available ports:")
-        for port in list(d.device for d in serial.tools.list_ports.comports()):
-            print(port)
+    @synchronize_in_thread
+    def disconnect(self):
+        if self.serial is not None:
+            self.serial.close()
+            self.serial = None
 
+    @synchronize_in_thread
+    def send_to_serial(self, information: str):
+        if self.serial is not None:
+            if not self.serial.is_open:
+                self.serial.open()
+            self.serial.write((information + "\n").encode("utf-8"))
+            self.serial.reset_input_buffer()
+        else:
+            Exception("Error sending to Serial.")
 
-@synchronize_in_thread
-def disconnect(self):
-    if self.serial is not None:
-        self.serial.close()
-        self.serial = None
+    def terminate_thread(self):
+        self.disconnect()
+        if self.graph is not None:
+            self.graph.terminate_thread()
+        self.run_available = False
 
-
-@synchronize_in_thread
-def send_to_serial(self, information: str):
-    if self.serial is not None:
-        if not self.serial.is_open:
-            self.serial.open()
-        self.serial.write((information + "\n").encode("utf-8"))
-        self.serial.reset_input_buffer()
-    else:
-        Exception("Error sending to Serial.")
-
-
-def terminate_thread(self):
-    self.disconnect()
-    self.run_available = False
-
-
-@synchronize_in_thread
-def current_buff(self):
-    return self.buffer
+    @synchronize_in_thread
+    def current_buff(self):
+        return self.buffer
