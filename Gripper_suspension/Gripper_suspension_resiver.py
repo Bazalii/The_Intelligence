@@ -84,3 +84,14 @@ def disconnect(self):
     if self.serial is not None:
         self.serial.close()
         self.serial = None
+
+
+@synchronize_in_thread
+def send_to_serial(self, information: str):
+    if self.serial is not None:
+        if not self.serial.is_open:
+            self.serial.open()
+        self.serial.write((information + "\n").encode("utf-8"))
+        self.serial.reset_input_buffer()
+    else:
+        Exception("Error sending to Serial.")
