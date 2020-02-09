@@ -95,3 +95,8 @@ def send_to_serial(self, information: str):
         self.serial.reset_input_buffer()
     else:
         Exception("Error sending to Serial.")
+
+
+def terminate_thread(self):
+    self.disconnect()
+    self.run_available = False
