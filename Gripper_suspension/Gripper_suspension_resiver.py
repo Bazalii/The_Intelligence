@@ -66,10 +66,11 @@ class GripSuspension(Thread):
                             data.replace("$", '')
                             data.replace(";", '')
                             parse = data.split(" ")
+                            parse = {"+x": float(parse[0][2:]), "-x": float(parse[1][2:]),
+                                     "+y": float(parse[2][2:]), "-y": float(parse[3][2:])}
                             if len(self.buffer) == self.data_buffer_len:
                                 self.buffer.pop(0)
-                                self.buffer.append({"+x": parse[0][2:], "-x": parse[1][2:],
-                                                    "+y": parse[2][2:], "-y": parse[3][2:]})
+                                self.buffer.append(parse)
 
                     except:
                         Exception("")
