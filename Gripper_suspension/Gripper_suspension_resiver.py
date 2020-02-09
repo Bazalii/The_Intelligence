@@ -26,6 +26,8 @@ class GripSuspension(Thread):
         self.run_available = False
         self.data_buffer_len = 5
         self.sleep_time = 0.05
+        self.buffer = []
+
         if (port is not None) and (baudrate is not None):
             self.serial = serial.Serial(port, baudrate, timeout=0.2)
         else:
@@ -61,7 +63,13 @@ class GripSuspension(Thread):
                             data: str = data.decode('utf-8').strip()
 
                         if data != "":
-                            pass
+                            data.replace("$", '')
+                            data.replace(";", '')
+                            parse = data.split(" ")
+                            if len(self.buffer) == self.data_buffer_len:
+                                self.buffer.pop(0)
+                                self.buffer.append({"+x": parse[0][2:], "-x": parse[1][2:],
+                                                    "+y": parse[2][2:], "-y": parse[3][2:]})
 
                     except:
                         Exception("")
