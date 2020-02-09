@@ -13,31 +13,38 @@ class ForceGraph(Thread):
         self.z = z
         self.run_available = False
         self.buffer = []
+        self.ax = None
 
         self.start()
 
     def run(self) -> None:
         self.run_available = True
-        ax = plt.axes(projection="3d")
-        ax.set_xlim3d(self.x)
-        ax.set_ylim3d(self.y)
-        ax.set_zlim3d(self.z)
+        self.ax = plt.axes(projection="3d")
+        self.ax.set_xlim3d(self.x)
+        self.ax.set_ylim3d(self.y)
+        self.ax.set_zlim3d(self.z)
 
-        ax.set_xlabel('X, g')
-        ax.set_ylabel('Y, g')
-        ax.set_zlabel('Z, g')
+        self.ax.set_xlabel('X, g')
+        self.ax.set_ylabel('Y, g')
+        self.ax.set_zlabel('Z, g')
 
         while self.run_available:
             if len(self.buffer) > 1:
                 for i in range(4):
-                    ax.lines[0].remove()
+                    self.ax.lines[0].remove()
 
                 val = self.buffer.pop(0)
-                ax.plot([0, 0], [0, 0], [0, val['-x']])
-                ax.plot([100, 100], [100, 100], [0, val['+x']])
-                ax.plot([100, 100], [0, 0], [0, val['-y']])
-                ax.plot([0, 0], [100, 100], [0, val['+y']])
+                self.ax.plot([0, 0], [0, 0], [0, val['-x']])
+                self.ax.plot([100, 100], [100, 100], [0, val['+x']])
+                self.ax.plot([100, 100], [0, 0], [0, val['-y']])
+                self.ax.plot([0, 0], [100, 100], [0, val['+y']])
                 plt.draw()
 
     def terminate_thread(self):
         self.run_available = False
+        if self.ax is not None:
+            self.ax.show()
+            del self.ax
+
+    def add_to_buffer(self, val: list):
+        self.buffer.extend(val)
