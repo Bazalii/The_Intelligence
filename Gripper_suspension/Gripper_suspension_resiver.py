@@ -5,6 +5,7 @@ import serial
 import serial.tools.list_ports
 
 from Gripper_suspension.Force_graph import ForceGraph
+from Classes.Vector_class import Vector
 
 functions_sequence = [[], [], []]
 
@@ -76,12 +77,20 @@ class GripSuspension(Thread):
                             parse = data.split(" ")
                             parse = {"+x": float(parse[0][2:]), "-x": float(parse[1][2:]),
                                      "+y": float(parse[2][2:]), "-y": float(parse[3][2:])}
-                            if len(self.buffer) == self.data_buffer_len:
+                            vec1 = Vector((0, 0, 0), (-parse['-x'] / (2 ** 0.5), 0, parse['-x'] / (2 ** 0.5)))
+                            vec2 = Vector((0, 0, 0), (parse['+x'] / (2 ** 0.5), 0, parse['+x'] / (2 ** 0.5)))
+                            vec3 = Vector((0, 0, 0), (0, -parse['-y'] / (2 ** 0.5), parse['-y'] / (2 ** 0.5)))
+                            vec4 = Vector((0, 0, 0), (0, parse['+y'] / (2 ** 0.5), parse['+y'] / (2 ** 0.5)))
+
+                            sum_vec = vec1 + vec2 + vec3 + vec4
+                            if len(self.buffer) >= self.data_buffer_len:
+                                self.buffer.append((sum_vec, parse))
                                 self.buffer.pop(0)
-                                self.buffer.append(parse)
+                            else:
+                                self.buffer.append((sum_vec, parse))
 
                             if self.graph is not None:
-                                self.graph.add_to_buffer(parse)
+                                self.graph.add_to_buffer((sum_vec, parse))
                     except:
                         pass
 

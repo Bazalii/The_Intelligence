@@ -31,25 +31,30 @@ class ForceGraph(Thread):
 
         while self.run_available:
             if len(self.buffer) > 0:
-                if len(self.ax.lines) >= 4:
-                    for i in range(4):
+                if len(self.ax.lines) >= 5:
+                    for i in range(5):
                         self.ax.lines[0].remove()
 
                 val = self.buffer.pop(0)
-                self.ax.plot([-100, -100], [-100, -100], [0, val['-x']], c=[0.7, 0.2, 0.2, 1])
-                self.ax.plot([100, 100], [100, 100], [0, val['+x']], c=[0.2, 0.7, 0.2, 1])
-                self.ax.plot([100, 100], [-100, -100], [0, val['-y']], c=[0.2, 0.2, 0.7, 1])
-                self.ax.plot([-100, -100], [100, 100], [0, val['+y']], c=[0.2, 0.2, 0.2, 1])
-                plt.draw()
-                plt.pause(0.0001)
 
-    def terminate_thread(self):
-        self.run_available = False
+                self.ax.plot([-100, -100], [0, 0], [0, val[1]['-x']], c=[0.7, 0.2, 0.2, 1])
+                self.ax.plot([100, 100], [0, 0], [0, val[1]['+x']], c=[0.2, 0.7, 0.2, 1])
+                self.ax.plot([0, 0], [-100, -100], [0, val[1]['-y']], c=[0.2, 0.2, 0.7, 1])
+                self.ax.plot([0, 0], [100, 100], [0, val[1]['+y']], c=[0.2, 0.2, 0.2, 1])
+                self.ax.plot([val[0].start_point.x, val[0].end_point.x],
+                             [val[0].start_point.y, val[0].end_point.y],
+                             [val[0].start_point.z, val[0].end_point.z], c=[0, 0, 0, 1])
+
+                plt.draw()
+                plt.pause(0.01)
         if self.ax is not None:
             del self.ax
 
+    def terminate_thread(self):
+        self.run_available = False
+
     def add_to_buffer(self, val: list or dict):
-        if type(val) == list:
-            self.buffer.extend(val)
+        if type(val) == list or tuple:
+            self.buffer.append(val)
         elif type(val) == dict:
             self.buffer.append(val)
