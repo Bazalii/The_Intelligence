@@ -123,8 +123,7 @@ class Vector:
 
     def __str__(self):
         return f"Start point: {str(self.start_point)}" \
-               f"\nEnd point: {str(self.end_point)}" \
-               f"\n\nRadius vector: {str(self.radius_vector())}"
+               f"\nEnd point: {str(self.end_point)}"
 
 
 def find_collinear_coefficients(what: Vector, i_fv: Vector, j_fv: Vector):
