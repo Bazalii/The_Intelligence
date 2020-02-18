@@ -69,6 +69,16 @@ class Vector:
         """
         return Vector(self.start_point, self.end_point)
 
+    def set_length(self, new_len: float or int):
+        """
+        Устанавливает новую длинну вектора, сохраняя направление вектора.
+        Не изменяет положение начальной точки!!!
+        :param new_len: новая длина вектора.
+        """
+        cof = new_len / self.length()
+        self.start_point *= cof
+        self.end_point *= cof
+
     # +
     def __add__(self, other: Point or tuple or list):
         if type(other) == Vector:
