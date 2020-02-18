@@ -79,26 +79,6 @@ if (Serial.available()){
         plus_x_dat.tare();
         plus_y_dat.tare();
     }
-    else{
-    if (data_input.charAt(1) == "T" || data_input.charAt(1) == "C"){
-        if (data_input.charAt(2) == "-"){
-            if (data_input.charAt(3) == "x" || data_input.charAt(3) == "X"){
-                minus_x_dat.tare();
-            }
-            else{
-                minus_y_dat.tare();
-                }
-            }
-        }
-        else {
-            if (data_input.charAt(3) == "x" || data_input.charAt(3) == "X"){
-                plus_x_dat.tare();
-            }
-            else{
-                plus_y_dat.tare();
-            }
-        }
-    }
 }
 
 Serial.println("$ +X" + String(plus_x_units) + " -X" + String(minus_x_units)
