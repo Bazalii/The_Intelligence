@@ -38,6 +38,11 @@ class GripSuspension(Thread):
         self.plus_y_filter = KalmanFilter(1e-2, 0.05 ** 2)
         self.minus_y_filter = KalmanFilter(1e-2, 0.05 ** 2)
 
+        self.plus_x_cof = 0
+        self.minus_x_cof = 0
+        self.plus_y_cof = 0
+        self.minus_y_cof = 0
+
         if (port is not None) and (baudrate is not None):
             self.serial = serial.Serial(port, baudrate, timeout=0.2)
         else:
@@ -81,10 +86,14 @@ class GripSuspension(Thread):
                             data = data.replace(';', '')
                             data = data.strip()
                             parse = data.split()
-                            parse = {"+x": self.plus_x_filter.latest_noisy_measurement(float(parse[0][2:])),
-                                     "-x": self.minus_x_filter.latest_noisy_measurement(float(parse[1][2:])),
-                                     "+y": self.plus_y_filter.latest_noisy_measurement(float(parse[2][2:])),
-                                     "-y": self.minus_y_filter.latest_noisy_measurement(float(parse[3][2:]))}
+                            parse = {"+x": self.plus_x_filter.latest_noisy_measurement(float(parse[0][2:]))
+                                           - self.plus_x_cof,
+                                     "-x": self.minus_x_filter.latest_noisy_measurement(float(parse[1][2:]))
+                                           - self.minus_x_cof,
+                                     "+y": self.plus_y_filter.latest_noisy_measurement(float(parse[2][2:]))
+                                           - self.plus_y_cof,
+                                     "-y": self.minus_y_filter.latest_noisy_measurement(float(parse[3][2:]))
+                                           - self.minus_y_cof}
                             vec1 = Vector((0, 0, 0), (-parse['-x'], 0, parse['-x']))
                             vec2 = Vector((0, 0, 0), (parse['+x'], 0, parse['+x']))
                             vec3 = Vector((0, 0, 0), (0, -parse['-y'], parse['-y']))
@@ -141,3 +150,16 @@ class GripSuspension(Thread):
 
     def latest_val(self):
         return self.buffer[-1]
+
+    def set_zero(self):
+        val = self.latest_val()
+        self.plus_x_cof = -val[1]['+x']
+        self.minus_x_cof = -val[1]['-x']
+        self.plus_y_cof = -val[1]['+y']
+        self.minus_y_cof = -val[1]['-y']
+
+    def no_zero(self):
+        self.plus_x_cof = 0
+        self.minus_x_cof = 0
+        self.plus_y_cof = 0
+        self.minus_y_cof = 0
