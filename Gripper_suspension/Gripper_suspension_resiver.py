@@ -6,6 +6,7 @@ import serial.tools.list_ports
 
 from Gripper_suspension.Force_graph import ForceGraph
 from Classes.Vector_class import Vector
+from Gripper_suspension.KalmanFilter_class import KalmanFilter
 
 functions_sequence = [[], [], []]
 
@@ -31,6 +32,11 @@ class GripSuspension(Thread):
         self.sleep_time = 0.1
         self.buffer = []
         self.graph = None
+
+        self.plus_x_filter = KalmanFilter(1e-2, 0.05 ** 2)
+        self.minus_x_filter = KalmanFilter(1e-2, 0.05 ** 2)
+        self.plus_y_filter = KalmanFilter(1e-2, 0.05 ** 2)
+        self.minus_y_filter = KalmanFilter(1e-2, 0.05 ** 2)
 
         if (port is not None) and (baudrate is not None):
             self.serial = serial.Serial(port, baudrate, timeout=0.2)
@@ -71,19 +77,23 @@ class GripSuspension(Thread):
                             data: str = data.decode('utf-8').strip()
 
                         if data != "":
-                            data = data.replace("$", '')
+                            data = data.replace('$', '')
                             data = data.replace(';', '')
                             data = data.strip()
-                            parse = data.split(" ")
-                            parse = {"+x": float(parse[0][2:]), "-x": float(parse[1][2:]),
-                                     "+y": float(parse[2][2:]), "-y": float(parse[3][2:])}
+                            parse = data.split()
+                            parse = {"+x": self.plus_x_filter.latest_noisy_measurement(float(parse[0][2:])),
+                                     "-x": self.minus_x_filter.latest_noisy_measurement(float(parse[1][2:])),
+                                     "+y": self.plus_y_filter.latest_noisy_measurement(float(parse[2][2:])),
+                                     "-y": self.minus_y_filter.latest_noisy_measurement(float(parse[3][2:]))}
                             vec1 = Vector((0, 0, 0), (-parse['-x'], 0, parse['-x']))
                             vec2 = Vector((0, 0, 0), (parse['+x'], 0, parse['+x']))
                             vec3 = Vector((0, 0, 0), (0, -parse['-y'], parse['-y']))
                             vec4 = Vector((0, 0, 0), (0, parse['+y'], parse['+y']))
 
-
                             sum_vec = vec1 + vec2 + vec3 + vec4
+                            sum_vec.set_length(abs(parse['-x']) + abs(parse['+x'])
+                                               + abs(parse['-y']) + abs(parse['+y']))
+
                             if len(self.buffer) >= self.data_buffer_len:
                                 self.buffer.append((sum_vec, parse))
                                 self.buffer.pop(0)
@@ -129,6 +139,5 @@ class GripSuspension(Thread):
         self.graph.join()
         self.join()
 
-    @synchronize_in_thread
-    def current_buff(self):
-        return self.buffer
+    def latest_val(self):
+        return self.buffer[-1]
