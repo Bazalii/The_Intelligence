@@ -1,5 +1,4 @@
 from threading import Thread
-import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
@@ -8,6 +7,12 @@ class ForceGraph(Thread):
 
     def __init__(self, x: list or tuple = (-100, 100), y:
     list or tuple = (-100, 100), z: list or tuple = (-100, 100)):
+        """
+        Инициализирует графическую визуализацию значений.
+        :param x: Первоначальные границы по X
+        :param y: Первоначальные границы по Y
+        :param z: Первоначальные границы по Z
+        """
         Thread.__init__(self)
         self.x = x
         self.y = y
@@ -51,9 +56,16 @@ class ForceGraph(Thread):
             del self.ax
 
     def terminate_thread(self):
+        """
+        Завершает работу визуализатора.
+        """
         self.run_available = False
 
     def add_to_buffer(self, val: list or dict):
+        """
+        Добавляет значения для последующей визуализации.
+        :param val: добавляемое значение.
+        """
         if type(val) == list or tuple:
             self.buffer.append(val)
         elif type(val) == dict:
