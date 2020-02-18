@@ -12,6 +12,11 @@ functions_sequence = [[], [], []]
 
 
 def synchronize_in_thread(function):
+    """
+    Декоратор для синхронизации выполнения функций внутри потока обработчика Serial порта.
+    Функция не должна ничего возвращать и может иметь любое количество входных параметров.
+    :param function: функция, которую нужно выполнить в потоке.
+    """
     global functions_sequence
 
     def wrapper(*args, **kwargs):
@@ -26,6 +31,15 @@ def synchronize_in_thread(function):
 class GripSuspension(Thread):
 
     def __init__(self, port: str = None, baudrate: int = None, **kwargs):
+        """
+        Инициализатор потока трекинга Serial порта по которому будет происходить передача данных с подвеса гриппера.
+        :param port: наименование Serial порта по которому будет происходить передача данных.
+        :param baudrate: скорость установленная на шине по которой будет происходить обмен данными.(кол-во бод)
+        :param kwargs: реализация дополнительных параметров и функционала.
+        "data_buffer" - устанавливает размер буфера записи входных данных.
+        "sleep_time" - время сна между циклами прочтения.
+        "graph" - графическая визуализация входных параметров.
+        """
         Thread.__init__(self)
         self.run_available = False
         self.data_buffer_len = 5
@@ -116,6 +130,11 @@ class GripSuspension(Thread):
 
     @synchronize_in_thread
     def connect(self, port: str, baudrate: int):
+        """
+        Присоединяется к устройству по Serial.
+        :param port: наименование Serial порта по которому будет происходить передача данных.
+        :param baudrate: скорость установленная на шине по которой будет происходить обмен данными.(кол-во бод)
+        """
         try:
             self.serial = serial.Serial(port, baudrate, timeout=0.2)
         except serial.SerialException:
@@ -126,12 +145,20 @@ class GripSuspension(Thread):
 
     @synchronize_in_thread
     def disconnect(self):
+        """
+        Отсоединяется от устройства.
+        :return:
+        """
         if self.serial is not None:
             self.serial.close()
             self.serial = None
 
     @synchronize_in_thread
     def send_to_serial(self, information: str):
+        """
+        Отправляет информацию устройству по Serial.
+        :param information: информация, которую необходимо передать.
+        """
         if self.serial is not None:
             if not self.serial.is_open:
                 self.serial.open()
@@ -141,6 +168,9 @@ class GripSuspension(Thread):
             Exception("Error sending to Serial.")
 
     def terminate_thread(self):
+        """
+        Останавливает поток.
+        """
         self.disconnect()
         if self.graph is not None:
             self.graph.terminate_thread()
@@ -149,10 +179,17 @@ class GripSuspension(Thread):
         self.join()
 
     def latest_val(self):
+        """
+        :return: последнее значение из буфера значений.
+        """
         return self.buffer[-1]
 
     @synchronize_in_thread
     def set_zero(self):
+        """
+        Програмно устанавливает входные значения равными 0.
+        :return:
+        """
         while len(self.buffer) <= 0:
             sleep(0.01)
         val = self.latest_val()
@@ -163,6 +200,10 @@ class GripSuspension(Thread):
 
     @synchronize_in_thread
     def no_zero(self):
+        """
+        Отменяет программное онулирование входных параметров.
+        :return:
+        """
         self.plus_x_cof = 0
         self.minus_x_cof = 0
         self.plus_y_cof = 0
