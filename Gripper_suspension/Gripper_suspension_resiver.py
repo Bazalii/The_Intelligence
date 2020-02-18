@@ -151,13 +151,17 @@ class GripSuspension(Thread):
     def latest_val(self):
         return self.buffer[-1]
 
+    @synchronize_in_thread
     def set_zero(self):
+        while len(self.buffer) <= 0:
+            sleep(0.01)
         val = self.latest_val()
-        self.plus_x_cof = -val[1]['+x']
-        self.minus_x_cof = -val[1]['-x']
-        self.plus_y_cof = -val[1]['+y']
-        self.minus_y_cof = -val[1]['-y']
+        self.plus_x_cof = val[1]['+x'] + self.plus_x_cof
+        self.minus_x_cof = val[1]['-x'] + self.minus_x_cof
+        self.plus_y_cof = val[1]['+y'] + self.plus_y_cof
+        self.minus_y_cof = val[1]['-y'] + self.minus_y_cof
 
+    @synchronize_in_thread
     def no_zero(self):
         self.plus_x_cof = 0
         self.minus_x_cof = 0
