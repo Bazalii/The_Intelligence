@@ -40,18 +40,23 @@ class ForceGraph(Thread):
                     for i in range(5):
                         self.ax.lines[0].remove()
 
+                if len(self.buffer) > 3:
+                    self.buffer = list(self.buffer.pop(-1))
                 val = self.buffer.pop(0)
+                try:
 
-                self.ax.plot([-100, -100], [0, 0], [0, val[1]['-x']], c=[0.7, 0.2, 0.2, 1])
-                self.ax.plot([100, 100], [0, 0], [0, val[1]['+x']], c=[0.2, 0.7, 0.2, 1])
-                self.ax.plot([0, 0], [-100, -100], [0, val[1]['-y']], c=[0.2, 0.2, 0.7, 1])
-                self.ax.plot([0, 0], [100, 100], [0, val[1]['+y']], c=[0.2, 0.2, 0.2, 1])
-                self.ax.plot([val[0].start_point.x, val[0].end_point.x],
-                             [val[0].start_point.y, val[0].end_point.y],
-                             [val[0].start_point.z, val[0].end_point.z], c=[0, 0, 0, 1])
+                    self.ax.plot([-100, -100], [0, 0], [0, val[1]['-x']], c=[0.7, 0.2, 0.2, 1])
+                    self.ax.plot([100, 100], [0, 0], [0, val[1]['+x']], c=[0.2, 0.7, 0.2, 1])
+                    self.ax.plot([0, 0], [-100, -100], [0, val[1]['-y']], c=[0.2, 0.2, 0.7, 1])
+                    self.ax.plot([0, 0], [100, 100], [0, val[1]['+y']], c=[0.2, 0.2, 0.2, 1])
+                    self.ax.plot([val[0].start_point.x, val[0].end_point.x],
+                                 [val[0].start_point.y, val[0].end_point.y],
+                                 [val[0].start_point.z, val[0].end_point.z], c=[0, 0, 0, 1])
 
-                plt.draw()
-                plt.pause(0.01)
+                    plt.draw()
+                    plt.pause(0.025)
+                except:
+                    pass
         if self.ax is not None:
             del self.ax
 
