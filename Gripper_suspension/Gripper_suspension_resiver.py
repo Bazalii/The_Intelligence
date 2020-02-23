@@ -60,7 +60,7 @@ class GripSuspension(Thread):
         self.writing_in_buffer_flag = False
 
         if (port is not None) and (baudrate is not None):
-            self.serial = serial.Serial(port, baudrate, timeout=0.2)
+            self.connect(port, baudrate)
         else:
             self.serial = None
         if kwargs.get("data_buffer", False):
@@ -192,21 +192,25 @@ class GripSuspension(Thread):
             pass
         return self.buffer[-1]
 
-    @synchronize_in_thread
     def set_zero(self):
         """
         Програмно устанавливает входные значения равными 0.
         :return:
         """
-        while len(self.buffer) <= 0:
-            sleep(0.01)
-        val = self.latest_val()
-        self.plus_x_cof = val[1]['+x'] + self.plus_x_cof
-        self.minus_x_cof = val[1]['-x'] + self.minus_x_cof
-        self.plus_y_cof = val[1]['+y'] + self.plus_y_cof
-        self.minus_y_cof = val[1]['-y'] + self.minus_y_cof
+        if len(self.buffer) <= 0:
+            self.plus_x_cof = 0
+            self.minus_x_cof = 0
+            self.plus_y_cof = 0
+            self.minus_y_cof = 0
+        else:
+            while self.writing_in_buffer_flag:
+                pass
+            val = self.latest_val()
+            self.plus_x_cof = val[1]['+x'] + self.plus_x_cof
+            self.minus_x_cof = val[1]['-x'] + self.minus_x_cof
+            self.plus_y_cof = val[1]['+y'] + self.plus_y_cof
+            self.minus_y_cof = val[1]['-y'] + self.minus_y_cof
 
-    @synchronize_in_thread
     def no_zero(self):
         """
         Отменяет программное онулирование входных параметров.
