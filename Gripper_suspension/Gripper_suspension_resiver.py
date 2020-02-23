@@ -57,6 +57,8 @@ class GripSuspension(Thread):
         self.plus_y_cof = 0
         self.minus_y_cof = 0
 
+        self.writing_in_buffer_flag = False
+
         if (port is not None) and (baudrate is not None):
             self.serial = serial.Serial(port, baudrate, timeout=0.2)
         else:
@@ -118,10 +120,14 @@ class GripSuspension(Thread):
                                                + abs(parse['-y']) + abs(parse['+y']))
 
                             if len(self.buffer) >= self.data_buffer_len:
+                                self.writing_in_buffer_flag = True
                                 self.buffer.append((sum_vec, parse))
                                 self.buffer.pop(0)
+                                self.writing_in_buffer_flag = False
                             else:
+                                self.writing_in_buffer_flag = True
                                 self.buffer.append((sum_vec, parse))
+                                self.writing_in_buffer_flag = False
 
                             if self.graph is not None:
                                 self.graph.add_to_buffer((sum_vec, parse))
@@ -182,6 +188,8 @@ class GripSuspension(Thread):
         """
         :return: последнее значение из буфера значений.
         """
+        while self.writing_in_buffer_flag:
+            pass
         return self.buffer[-1]
 
     @synchronize_in_thread
