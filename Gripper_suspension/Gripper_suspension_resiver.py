@@ -47,10 +47,10 @@ class GripSuspension(Thread):
         self.buffer = []
         self.graph = None
 
-        self.plus_x_filter = KalmanFilter(1e-2, 0.05 ** 2)
-        self.minus_x_filter = KalmanFilter(1e-2, 0.05 ** 2)
-        self.plus_y_filter = KalmanFilter(1e-2, 0.05 ** 2)
-        self.minus_y_filter = KalmanFilter(1e-2, 0.05 ** 2)
+        self.plus_x_filter = KalmanFilter(1e-3, 0.0025)
+        self.minus_x_filter = KalmanFilter(1e-3, 0.0025)
+        self.plus_y_filter = KalmanFilter(1e-3, 0.0025)
+        self.minus_y_filter = KalmanFilter(1e-3, 0.0025)
 
         self.plus_x_cof = 0
         self.minus_x_cof = 0
@@ -58,11 +58,9 @@ class GripSuspension(Thread):
         self.minus_y_cof = 0
 
         self.writing_in_buffer_flag = False
-
+        self.serial = None
         if (port is not None) and (baudrate is not None):
             self.connect(port, baudrate)
-        else:
-            self.serial = None
         if kwargs.get("data_buffer", False):
             self.data_buffer_len = kwargs["data_buffer"]
         if kwargs.get("sleep_time", False):
