@@ -5,6 +5,9 @@ from Classes.Point_class import Point
 class Manipulator(MovingSystem):
 
     def __init__(self, moving_speed: float or int):
+        """
+        :param moving_speed: начальная скорость перемещения по всем осям.
+        """
         self.current_position = Point(0, 0, 0)
         self.program_zero = Point(0, 0, 0)
         self.x_speed = moving_speed
@@ -12,9 +15,18 @@ class Manipulator(MovingSystem):
         self.z_speed = moving_speed
         print("Manipulator initialisation")
 
-    def move_to_point(self, x: float or Point = None, y: float = None, z: float = None, tx: float = None,
-                      ty: float = None,
-                      tz: float = None):
+    def move_to_point(self, x: float or Point = None, y: float = None, z: float = None,
+                      tx: float = None, ty: float = None, tz: float = None):
+        """
+        Метод перемешения "головы" в звданную точку.
+        :param x: Координата по X
+        :param y: Координата по Y
+        :param z: Координата по Z
+        :param tx: Угол отклонения от оси OX
+        :param ty: Угол отклонения от оси OY
+        :param tz: Угол отклонения от оси OZ
+        :return:
+        """
         if type(x) == Point:
             print(f"Moving to point -> {x}")
             self.current_position = x
@@ -36,15 +48,29 @@ class Manipulator(MovingSystem):
             self.current_position = position
 
     def set_zero(self):
+        """
+        Аппаратная установка точки начала отсчета
+        """
         # something to set zero position on manipulator
         self.current_position = Point(0, 0, 0)
         print("Set zero.")
 
     def set_program_zero(self):
+        """
+        Программная установка положения точки начала отсчета
+        """
         self.program_zero = self.current_position.copy()
         print("Set zero.")
 
     def set_speed(self, **kwargs):
+        """
+        Установка скоростей перемещения по осям.
+        :param kwargs:
+        :key x_speed - новая скорость перемещения по OX
+        :key y_speed - новая скорость перемещения по OY
+        :key z_speed - новая скорость перемещения по OZ
+        :return:
+        """
         if kwargs.get("x_speed", False):
             self.x_speed = kwargs["x_speed"]
         if kwargs.get("y_speed", False):
