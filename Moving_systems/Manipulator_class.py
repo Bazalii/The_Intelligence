@@ -1,18 +1,32 @@
+import telnetlib as tn
 from Moving_systems.Moving_system_class import MovingSystem
 from Classes.Point_class import Point
 
 
 class Manipulator(MovingSystem):
 
-    def __init__(self, moving_speed: float or int):
+    def __init__(self, host: str, telnet_username: str, telnet_password: str, moving_speed: float or int):
         """
+        :param host: локальный хост севера Telnet
+        :param telnet_username: имя пользователя на сервере
+        :param telnet_password: пароль пользователя
         :param moving_speed: начальная скорость перемещения по всем осям.
         """
+        self.__host = host
+        self.__user_name = telnet_username
+        self.__password = telnet_password
         self.current_position = Point(0, 0, 0)
         self.program_zero = Point(0, 0, 0)
         self.x_speed = moving_speed
         self.y_speed = moving_speed
         self.z_speed = moving_speed
+
+        self.telnet_host = tn.Telnet(self.__host)
+        self.telnet_host.read_until(b"login: ")
+        self.telnet_host.write(self.__user_name.encode('ascii') + b"\n")
+        self.telnet_host.read_until(b"Password: ")
+        self.telnet_host.write(self.__password.encode('ascii') + b"\n")
+        self.telnet_host.read_all()
         print("Manipulator initialisation")
 
     def move_to_point(self, x: float or Point = None, y: float = None, z: float = None,
