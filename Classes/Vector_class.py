@@ -1,8 +1,10 @@
+from __future__ import annotations
 from Classes.Point_class import Point
+from typing import Iterable
 
 
 class Vector:
-    def __init__(self, point1: Point or tuple, point2: Point or tuple = None):
+    def __init__(self, point1: Point or Iterable, point2: Point or Iterable = None):
         """
         Создает вектор плоскости. Если дана только одна точка, то вектор счетается радиус-вектором(начало в (0,0)).
         :param point1: Точка начала вектора относительно С.О.
@@ -35,7 +37,7 @@ class Vector:
                     + (self.start_point.y - self.end_point.y) ** 2
                     + (self.start_point.z - self.end_point.z) ** 2) ** 0.5
 
-    def move_to_point(self, new_start_point: Point or tuple) -> None:
+    def move_to_point(self, new_start_point: Point or Iterable) -> None:
         """
         Перемещает начало вектора к заданной точке.
         :param new_start_point: Точка куда необходимо перенести вектор.
@@ -51,7 +53,7 @@ class Vector:
         """
         return self.end_point - self.start_point
 
-    def move_along_vector(self, vector) -> None:
+    def move_along_vector(self, vector: Vector) -> None:
         """
         Перемещает существующий вектор вдоль другого вектора.
         :param vector: Вектор вдоль которого необходимо перемещать.
@@ -63,13 +65,13 @@ class Vector:
         else:
             raise TypeError("Incorrect input of vector.")
 
-    def copy(self):
+    def copy(self) -> Vector:
         """
         :return: Копию вектора.
         """
         return Vector(self.start_point, self.end_point)
 
-    def set_length(self, new_len: float or int):
+    def set_length(self, new_len: float or int) -> None:
         """
         Устанавливает новую длинну вектора, сохраняя направление вектора.
         Не изменяет положение начальной точки!!!
@@ -80,7 +82,7 @@ class Vector:
         self.end_point *= cof
 
     # +
-    def __add__(self, other: Point or tuple or list):
+    def __add__(self, other: Point or Iterable or Vector) -> Vector:
         if type(other) == Vector:
             return Vector(self.start_point + other.start_point, self.end_point + other.end_point)
         other = Point.check_Point(other)
@@ -89,7 +91,7 @@ class Vector:
         return Vector(start, end)
 
     # -
-    def __sub__(self, other):
+    def __sub__(self, other: Point or Iterable or Vector):
         if type(other) == Vector:
             return Vector(self.start_point - other.start_point, self.end_point - other.end_point)
         other = Point.check_Point(other)
@@ -98,21 +100,25 @@ class Vector:
         return Vector(start, end)
 
     # /
-    def __truediv__(self, other):
+    def __truediv__(self, other: Point or Iterable or Vector):
+        if type(other) == Vector:
+            return Vector(self.start_point / other.start_point, self.end_point / other.end_point)
         other = Point.check_Point(other)
         start = self.start_point / other
         end = self.end_point / other
         return Vector(start, end)
 
     # *
-    def __mul__(self, other):
+    def __mul__(self, other: Point or Iterable or Vector):
+        if type(other) == Vector:
+            return Vector(self.start_point * other.start_point, self.end_point * other.end_point)
         other = Point.check_Point(other)
         start = self.start_point * other
         end = self.end_point * other
         return Vector(start, end)
 
     # ==
-    def __eq__(self, other):
+    def __eq__(self, other: Vector) -> bool:
         """
         Вектора равны, если их радиус-вектора равны.
         :param other: Вектор с которым идет сравнение.
@@ -123,7 +129,7 @@ class Vector:
         else:
             return False
 
-    def __getitem__(self, item: int):
+    def __getitem__(self, item: int) -> Point:
         if item == 0:
             return self.start_point
         elif item == 1:
@@ -131,7 +137,7 @@ class Vector:
         else:
             raise IndexError("Index out of range.")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Start point: {str(self.start_point)}" \
                f"\nEnd point: {str(self.end_point)}"
 
