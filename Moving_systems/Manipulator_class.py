@@ -60,7 +60,26 @@ class Manipulator(MovingSystem):
             else:
                 position.z = self.current_position.z - self.program_zero.z
             self.current_position = position
-
+    def set_start_height(self):
+        """
+        Аппаратная установка высоты работы
+        """
+    def pick(self):
+        """
+        Реализация захвата детали (опустились, зажали, подняли)
+        """
+    def setup(self):
+        """
+        Реализация установки детали
+        """
+    def set_custom_angle(self):
+        """
+        Отклонение на нужный нам угол
+        """
+    def set_default_angle(self):
+        """
+        Задается начальный угол(параллельное столу положение)
+        """
     def set_zero(self):
         """
         Аппаратная установка точки начала отсчета
