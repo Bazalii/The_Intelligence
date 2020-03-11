@@ -1,0 +1,4 @@
+>point b=shift(a by 100,0,0)
+    X[mm]     Y[mm]     Z[mm]     O[deg]    A[deg]    T[deg]
+   100.000     0.000     0.000     0.000     0.000     0.000
+Change? (If not, Press RETURN only.)
