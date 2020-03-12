@@ -17,7 +17,7 @@ cap = cv2.VideoCapture(0)
 cv2.namedWindow("Capture", 0)
 cv2.namedWindow("Capture_modified", 0)
 
-num = 9
+num = 0
 try:
     while True:
         ret, img = cap.read()
@@ -32,19 +32,20 @@ try:
 
         cv2.imshow("Capture", img)
         if ret:
-            if time() - c_time > 500:
-                objpoints.append(objp)
+            # if time() - c_time > 500:
+            objpoints.append(objp)
 
-                cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
-                imgpoints.append(corners)
+            cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
+            imgpoints.append(corners)
 
-                # Draw and display the corners
-                image = cv2.drawChessboardCorners(img, (7, 6), corners, ret)
-                cv2.imshow("Capture_modified", image)
-                cv2.imwrite(f"Calibration_images/Calibration_image_#{num}.png", img)
-                cv2.waitKey(100)
-                num += 1
-                ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
-        cv2.waitKey(1)
+            # Draw and display the corners
+            image = cv2.drawChessboardCorners(img, (7, 6), corners, ret)
+            cv2.imshow("Capture_modified", image)
+            cv2.imwrite(f"Calibration_images/Calibration_image_#{num}.png", img)
+            cv2.waitKey(100)
+            num += 1
+            ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 finally:
     cv2.destroyAllWindows()
