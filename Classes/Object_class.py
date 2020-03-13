@@ -8,5 +8,6 @@ class Object:
         self.marker_1 = marker_1
         self.marker_2 = marker_2
         self.height = height
+        self.ids = [marker_1.id, marker_2.id]
         if kwargs.get("name", False):
             self.name = kwargs["name"]
