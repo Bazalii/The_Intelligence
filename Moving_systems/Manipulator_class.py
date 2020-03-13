@@ -1,4 +1,6 @@
 import telnetlib as tn
+
+from Classes.Vector_class import Vector
 from Moving_systems.Moving_system_class import MovingSystem
 from Classes.Point_class import Point
 
@@ -110,3 +112,8 @@ class Manipulator(MovingSystem):
             self.y_speed = kwargs["y_speed"]
         if kwargs.get("z_speed", False):
             self.z_speed = kwargs["z_speed"]
+    def move_by_vector(self, point: Point or Vector):
+        """
+        Смещение на вектор
+        """
+        
