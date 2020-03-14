@@ -1,5 +1,7 @@
 import telnetlib as tn
-
+from time import sleep
+import telnetlib
+import socket
 from Classes.Vector_class import Vector
 from Moving_systems.Moving_system_class import MovingSystem
 from Classes.Point_class import Point
@@ -7,30 +9,35 @@ from Classes.Point_class import Point
 
 class Manipulator(MovingSystem):
 
-    def __init__(self, host: str, telnet_username: str, telnet_password: str, telnet_port: int):
+    def __init__(self):
         """
         :param host: локальный хост севера Telnet
         :param telnet_username: имя пользователя на сервере
         :param telnet_password: пароль пользователя
         :param moving_speed: начальная скорость перемещения по всем осям.
         """
+
         self.tx = 0
         self.ty = 0
         self.tz = 0
-        self.__host = host
-        self.__user_name = telnet_username
-        self.__password = telnet_password
-        self.port = telnet_port
         self.current_position = Point(0, 0, 0)
         self.program_zero = Point(0, 0, 0)
-
-        self.telnet_host = tn.Telnet(self.__host, self.port)
-        self.telnet_host.read_all()
-        self.telnet_host.write(self.__user_name.encode() + b"\n" + b"\n")
-        self.telnet_host.read_all()
-        self.telnet_host.write(b"\n" + b"\n")
-        self.telnet_host.read_all()
         print("Manipulator initialisation")
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.connect(("127.0.0.1", 9105))
+        sleep(1)
+        t = self.socket.recv(4096)
+        sleep(1)
+        self.socket.sendall(b"as\n")
+        sleep(1)
+        t = self.socket.recv(4096)
+        sleep(1)
+        print("logged: " + t.decode("utf-8"))
+        sleep(1)
+        self.socket.sendall(b"ZPOW ON\n")
+        sleep(1)
+        t = self.socket.recv(4096)
+        sleep(1)
 
     def move_to_point(self, x: float or Point = None, y: float = None, z: float = None,
                       tx: float = None, ty: float = None, tz: float = None):
@@ -44,12 +51,21 @@ class Manipulator(MovingSystem):
         :param tz: Угол отклонения от оси OZ
         :return:
         """
-        command = "point a"
-        self.telnet_host.write(command.encode() + b"\n")
-        command =f"{x},{y},{z},0,180,-90"
-        self.telnet_host.write(command.encode() + b"\n" + b"\n")
-        command = f"do jmove a"
-        self.telnet_host.write(command.encode() + b"\n")
+        self.socket.sendall(b"point a\n")
+        sleep(1)
+        t = self.socket.recv(4096)
+        sleep(1)
+        command = f"{x},{y},{z},0,180,-90"
+        print(command)
+        self.socket.sendall(command.encode()+ b"\n" + b"\n")
+        sleep(1)
+        print("point set: " + t.decode("utf-8"))
+        sleep(1)
+        self.socket.sendall(b"do jmove a\n")
+        sleep(1)
+        t = self.socket.recv(4096)
+        sleep(1)
+        print("done a move: " + t.decode("utf-8"))
         # if type(x) == Point:
         #     print(f"Moving to point -> {x}")
         #     self.current_position = x
@@ -138,18 +154,20 @@ class Manipulator(MovingSystem):
         """
         получить текущую позицию
         """
-        command = "point a = here"
-        self.telnet_host.write(command.encode() + b"\n")
-        input_data = (self.telnet_host.read_until(b'Change')).split()
-        x = input_data[6]
-        y = input_data[7]
-        z = input_data[8]
+        self.socket.sendall(b"point a = here\n")
+        sleep(1)
+        t = self.socket.recv(4096)
+        input_data = (t.decode().split())
+        x = input_data[10]
+        y = input_data[11]
+        z = input_data[12]
         self.x = x
         self.y = y
         self.z = z
-        self.tx = input_data[9]
-        self.ty = input_data[10]
-        self.tz = input_data[11]
+        self.tx = input_data[13]
+        self.ty = input_data[14]
+        self.tz = input_data[15]
+        print(self.x, self.y, self.z, self.tx, self.ty, self.tz)
         return Point(x, y, z)
 
 
