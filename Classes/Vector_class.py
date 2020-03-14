@@ -77,9 +77,13 @@ class Vector:
         Не изменяет положение начальной точки!!!
         :param new_len: новая длина вектора.
         """
+        rad = self.radius_vector()
         cof = new_len / self.length()
-        self.start_point *= cof
-        self.end_point *= cof
+        rad *= cof
+        vec = Vector(Point(0,0), rad)
+        vec.move_to_point(self.start_point)
+        # self.start_point *= cof
+        self.end_point = vec.end_point
 
     # +
     def __add__(self, other: Point or Iterable or Vector) -> Vector:
