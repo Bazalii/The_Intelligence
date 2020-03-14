@@ -44,12 +44,20 @@ class Manipulator(MovingSystem):
         :param tz: Угол отклонения от оси OZ
         :return:
         """
-        command = "point a"
-        self.telnet_host.write(command.encode() + b"\n")
-        command =f"{x},{y},{z},0,180,-90"
-        self.telnet_host.write(command.encode() + b"\n" + b"\n")
-        command = f"do jmove a"
-        self.telnet_host.write(command.encode() + b"\n")
+        if type(x) is Point:
+            command = "point a"
+            self.telnet_host.write(command.encode() + b"\n")
+            command = f"{x.x},{x.y},{x.z},0,180,-90"
+            self.telnet_host.write(command.encode() + b"\n" + b"\n")
+            command = f"do jmove a"
+            self.telnet_host.write(command.encode() + b"\n")
+        else:
+            command = "point a"
+            self.telnet_host.write(command.encode() + b"\n")
+            command = f"{x},{y},{x},0,180,-90"
+            self.telnet_host.write(command.encode() + b"\n" + b"\n")
+            command = f"do jmove a"
+            self.telnet_host.write(command.encode() + b"\n")
         # if type(x) == Point:
         #     print(f"Moving to point -> {x}")
         #     self.current_position = x
@@ -108,7 +116,6 @@ class Manipulator(MovingSystem):
         command = f"do jmove a"
         self.telnet_host.write(command.encode() + b"\n")
 
-
     def set_default_angle(self):
         """
         Задается начальный угол(параллельное столу положение)
@@ -151,5 +158,3 @@ class Manipulator(MovingSystem):
         self.ty = input_data[10]
         self.tz = input_data[11]
         return Point(x, y, z)
-
-
