@@ -9,6 +9,9 @@ class Point:
         :param y: Позиция точки по Y.
         :param z: Позиция точки по Z.
         """
+        self.x = None
+        self.y = None
+        self.z = None
         if y is not None:
             self.x = x
             self.y = y
