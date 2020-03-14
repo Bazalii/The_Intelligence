@@ -106,7 +106,7 @@ while not find_zero_flag:
         while gripper_suspension.latest_val()[0].start_point.z < 100:
             manipulator.move_by_vector(Point(0, 0, -1))
         manipulator_zero_poss = manipulator.get_pos()
-        manipulator.move_to_point(manipulator_zero_poss + Point(0,0,SAFETY_MOVE_HEIGHT))
+        manipulator.move_to_point(manipulator_zero_poss + Point(0, 0, SAFETY_MOVE_HEIGHT))
 
         while not find_zero_flag:
             ret, frame = cap.read()
@@ -142,8 +142,47 @@ while not find_zero_flag:
 
 
 # Scan
+detected_markers = [0, 1, 2]
 
+for x_l in range(0, 900, 100):
+    x_vector_move.set_length(x_l)
+    for y_l in range(0, 500, 100):
+        y_vector_move.set_length(y_l)
+        move_vector = x_vector_move + y_vector_move
+        manipulator.move_to_point(move_vector.end_point)
 
+        for i in range(20):
+            ret, frame = cap.read()
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+            for i in range(0, ids.size):
+                _id = ids[i][0]
+                if _id in detected_markers:
+                    marker_is_detect = False
+                    while not marker_is_detect:
+                        ret, frame = cap.read()
+                        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+                        x_vector = None
+                        y_vector = None
+                        move_vector = None
+                        frame_center = Point(frame.shape[1] / 2, frame.shape[0] / 2)
+                        if ids is not None:
+                            ids_dict = {}
+                            ids_middle = {}
+
+                            for i in range(ids.size):
+                                ids_dict[int(ids[i][0])] = corners[i][0]
+                                ids_middle[int(ids[i][0])] = find_middle(corners[i][0])
+
+                            if _id in ids_dict.keys():
+                                middle = ids_middle[_id]
+                                move_vector = Vector(middle, frame_center)
+                                if move_vector.length() > 2:
+                                    move_vector.set_length(move_vector.length() * ADAPTIVE_CONSTANT)
+                                    manipulator.move_by_vector(move_vector)
+                                else:
+                                    if
 
 try:
     while True:
