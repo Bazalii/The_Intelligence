@@ -47,7 +47,10 @@ class Manipulator(MovingSystem):
         if type(x) is Point:
             command = "point a"
             self.telnet_host.write(command.encode() + b"\n")
-            command = f"{x.x},{x.y},{x.z},0,180,-90"
+            if x.z is None:
+                command = f"{x.x},{x.y},0,0,180,-90"
+            else:
+                command = f"{x.x},{x.y},{x.z},0,180,-90"
             self.telnet_host.write(command.encode() + b"\n" + b"\n")
             command = f"do jmove a"
             self.telnet_host.write(command.encode() + b"\n")
