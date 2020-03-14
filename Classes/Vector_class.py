@@ -174,5 +174,8 @@ def angle_between_two_angels(vec1: Vector, vec2: Vector):
     param2 = vec_1.length()*vec_2.length()
     vec_1 = vec_1.radius_vector()
     vec_2 = vec_2.radius_vector()
-    param1 = (vec_1.x*vec_2.x + vec_1.y*vec_2.y + vec_1.z*vec_2.z)
+    if vec_1.z is None or vec_2.z is None:
+        param1 = vec_1.x*vec_2.x + vec_1.y*vec_2.y
+    else:
+        param1 = vec_1.x*vec_2.x + vec_1.y*vec_2.y + vec_1.z*vec_2.z
     return acos(param1/param2)
