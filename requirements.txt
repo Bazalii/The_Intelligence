@@ -2,3 +2,4 @@ numpy==1.17.2
 opencv-python==4.1.2.30
 opencv-contrib-python==4.1.2.30
 blue==0.2.0
+PyBluez==0.23

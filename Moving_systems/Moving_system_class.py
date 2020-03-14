@@ -35,14 +35,4 @@ class MovingSystem(ABC):
         """
         pass
 
-    @abstractmethod
-    def set_speed(self, **kwargs):
-        """
-        Установка скоростей перемещения по осям.
-        :param kwargs:
-        :key x_speed - новая скорость перемещения по OX
-        :key y_speed - новая скорость перемещения по OY
-        :key z_speed - новая скорость перемещения по OZ
-        :return:
-        """
-        pass
+

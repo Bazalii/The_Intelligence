@@ -2,7 +2,22 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "HX711.h"
-
+#include <Servo.h> 
+Servo Serva_L;
+Servo Serva_R;
+void loop() 
+{
+  Serva_L.write(90);
+  delay(500);
+  myservo.write(0);
+  delay(500);
+  // устанавливаем сервопривод в крайнее правое положение
+  myservo.write(180);
+  delay(500);
+} 
+//Servo
+#define Serva_left 12
+#define Serva_right 13
 
 // Tensor (+X)
 #define plus_x_DOT 9
@@ -51,6 +66,9 @@ Serial.println("$ +X" + String(plus_x_units) + " -X" + String(minus_x_units)
 }
 
 void setup(){
+   
+Serva_L.attach(Serva_left);
+Serva_R.attach(Serva_right);
 Serial.begin(115200);
 
 // + X setup
