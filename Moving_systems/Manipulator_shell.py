@@ -6,7 +6,7 @@ from Classes.Point_class import Point
 
 class Manipulator(MovingSystem):
 
-    def __init__(self, host: str, telnet_username: str, telnet_password: str, moving_speed: float or int):
+    def __init__(self, host: str, telnet_username: str, telnet_password: str):
         """
         :param host: локальный хост севера Telnet
         :param telnet_username: имя пользователя на сервере
@@ -83,4 +83,7 @@ class Manipulator(MovingSystem):
         Смещение на вектор
         """
         print(f"Move")
+
+    def get_pos(self) -> Point:
+        pass
 
