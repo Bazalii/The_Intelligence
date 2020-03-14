@@ -7,7 +7,7 @@ from Classes.Point_class import Point
 
 class Manipulator(MovingSystem):
 
-    def __init__(self, host: str, telnet_username: str, telnet_password: str, moving_speed: float or int):
+    def __init__(self, host: str, telnet_username: str, telnet_password: str):
         """
         :param host: локальный хост севера Telnet
         :param telnet_username: имя пользователя на сервере
@@ -19,9 +19,6 @@ class Manipulator(MovingSystem):
         self.__password = telnet_password
         self.current_position = Point(0, 0, 0)
         self.program_zero = Point(0, 0, 0)
-        self.x_speed = moving_speed
-        self.y_speed = moving_speed
-        self.z_speed = moving_speed
 
         self.telnet_host = tn.Telnet(self.__host)
         self.telnet_host.read_until(b"login: ")
