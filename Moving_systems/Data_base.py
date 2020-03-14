@@ -9,9 +9,9 @@ zero_ids = [0, 1, 2]
 electronic_self_ids = [3, 4]
 # Markers
 # zero markers
-Zero_marker0 = Marker(0, None, 25, name="zero_0")
-Zero_marker1 = Marker(1, None, 25, name="zero_X")
-Zero_marker2 = Marker(2, None, 25, name="zero_Y")
+Zero_marker0 = Marker(0, None, 35, name="zero_0")
+Zero_marker1 = Marker(1, None, 35, name="zero_X")
+Zero_marker2 = Marker(2, None, 35, name="zero_Y")
 
 # markers
 Wheel1_marker0 = Marker(10, None, 40, name="Left_front")
