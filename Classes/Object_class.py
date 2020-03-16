@@ -11,3 +11,6 @@ class Object:
         self.ids = [marker_1.id, marker_2.id]
         if kwargs.get("name", False):
             self.name = kwargs["name"]
+
+        if kwargs.get("angle", False):
+            self.name = kwargs["angle"]
