@@ -55,6 +55,7 @@ Wheel_front_right = Object(Wheel2_marker0, Wheel2_marker1, 89, None)
 Wheel_back_left = Object(Wheel3_marker0, Wheel3_marker1, 89, None)
 Wheel_back_right = Object(Wheel4_marker0, Wheel4_marker1, 89, None)
 
+objects_list = [Car_cap, Electronic_module, Wheel_front_left, Wheel_front_right, Wheel_back_left, Wheel_back_right]
 '''
        car front
            |
