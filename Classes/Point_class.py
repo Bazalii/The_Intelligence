@@ -9,6 +9,9 @@ class Point:
         :param y: Позиция точки по Y.
         :param z: Позиция точки по Z.
         """
+        self.x = None
+        self.y = None
+        self.z = None
         if y is not None:
             self.x = x
             self.y = y
@@ -20,6 +23,8 @@ class Point:
                     self.y = x[1]
                     if (len(x) >= 3) and (type(x[2]) == int or type(x[2])):
                         self.z = x[2]
+                    else:
+                        self.z = z
             except:
                 raise TypeError("Incorrect input type. Type is not iterable.")
 
@@ -181,20 +186,21 @@ class Point:
         return Point(self.x, self.y)
 
     @classmethod
-    def check_Point(cls, obj) -> Point:
+    def check_Point(cls, p_object) -> Point:
         """
         :param obj: Любое значение, которое ожидается в виде объекта класса Point.
         :return: Коррекный объект класса Point.
         """
-        if type(obj) == Point:
-            return Point(obj.x, obj.y, obj.z)
+        if type(p_object) == Point:
+            return Point(p_object.x, p_object.y, p_object.z)
         else:
             try:
-                obj[0] = float(obj[0])
-                obj[1] = float(obj[1])
+                obj = []
+                obj.append(float(p_object[0]))
+                obj.append(float(p_object[1]))
                 if type(obj[0]) == float or type(obj[1]) == float:
-                    if len(obj) > 2:
-                        obj[2] = float(obj[2])
+                    if len(p_object) > 2:
+                        obj.append(float(p_object[2]))
                         if type(obj[2]) == float:
                             return Point(obj)
                         else:

@@ -20,8 +20,19 @@ class Manipulator(MovingSystem):
         self.tx = 0
         self.ty = 0
         self.tz = 0
+        self.__host = host
+        self.__user_name = telnet_username
+        self.__password = telnet_password
+        self.port = telnet_port
         self.current_position = Point(0, 0, 0)
         self.program_zero = Point(0, 0, 0)
+
+        self.telnet_host = tn.Telnet(self.__host, self.port)
+        self.telnet_host.read_all()
+        self.telnet_host.write(self.__user_name.encode() + b"\n" + b"\n")
+        self.telnet_host.read_all()
+        self.telnet_host.write(b"\n" + b"\n")
+        self.telnet_host.read_all()
         print("Manipulator initialisation")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect(("127.0.0.1", 9105))

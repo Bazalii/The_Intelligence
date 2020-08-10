@@ -2,22 +2,17 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "HX711.h"
-#include <Servo.h> 
-Servo Serva_L;
-Servo Serva_R;
-void loop() 
-{
-  Serva_L.write(90);
-  delay(500);
-  myservo.write(0);
-  delay(500);
-  // устанавливаем сервопривод в крайнее правое положение
-  myservo.write(180);
-  delay(500);
-} 
-//Servo
-#define Serva_left 12
-#define Serva_right 13
+#include <Servo.h>
+
+// Servo
+#define left_servo_pin 12
+#define right_servo_pin 13
+
+#define open_angle 90
+#define close_angle 0
+
+Servo L_servo;
+Servo R_servo;
 
 // Tensor (+X)
 #define plus_x_DOT 9
@@ -66,10 +61,11 @@ Serial.println("$ +X" + String(plus_x_units) + " -X" + String(minus_x_units)
 }
 
 void setup(){
-   
-Serva_L.attach(Serva_left);
-Serva_R.attach(Serva_right);
 Serial.begin(115200);
+
+// Servo setup
+R_servo.attach(right_servo_pin);
+L_servo.attach(left_servo_pin);
 
 // + X setup
 plus_x_dat.begin(plus_x_DOT, plus_x_SCK);
@@ -112,12 +108,16 @@ void loop(){
 
 
 if (Serial.available()){
+    cli();
     data_input = Serial.readString();
-    if (data_input == "tare"){
-        minus_x_dat.tare();
-        minus_y_dat.tare();
-        plus_x_dat.tare();
-        plus_y_dat.tare();
+    if (data_input == "open"){
+        R_servo.write(open_angle);
+        L_servo.write(open_angle);
+    }
+    if (data_input == "clase"){
+        R_servo.write(close_angle);
+        L_servo.write(close_angle);
     }
   }
+    sei();
 }
