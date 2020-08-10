@@ -200,7 +200,7 @@ class Point:
                 obj.append(float(p_object[1]))
                 if type(obj[0]) == float or type(obj[1]) == float:
                     if len(p_object) > 2:
-                        obj.append(float(obj[2]))
+                        obj.append(float(p_object[2]))
                         if type(obj[2]) == float:
                             return Point(obj)
                         else:
