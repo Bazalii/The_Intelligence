@@ -1,4 +1,4 @@
-numpy==1.17.2
+numpy==1.22.0
 opencv-python==4.1.2.30
 opencv-contrib-python==4.1.2.30
 blue==0.2.0
